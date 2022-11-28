@@ -39,7 +39,7 @@ pipeline {
             steps {
                 
                 
-                sh 'docker build -t devopsenginire/jenkins:1.0 . '
+                sh 'docker build -t devopsenginire/jenkins:2.0 . '
                
             }
         }
@@ -52,7 +52,7 @@ pipeline {
         stage('Push Docker hub') {
             steps {
                  
-                 sh 'docker push devopsenginire/jenkins:1.0 '
+                 sh 'docker push devopsenginire/jenkins:2.0 '
                    
              
             }

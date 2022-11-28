@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+    environment {
+		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
+	}
+    stages {
+        stage('Docker version') {
+            steps {
+                echo 'Hello docker'
+                sh 'echo $USER'
+                sh 'docker version'
+            }
+        }
+         stage('Delete  workspace build') {
+            steps {
+                echo 'Delete directory workspace'
+                deleteDir()
+            }
+        }
+         stage('Git steps') {
+            steps {
+                git branch: 'main',
+                   url: 'https://github.com/system-it-it/java-docker.git'
+            
+            }
+        }
+        stage('Git test') {
+            steps {
+                // dir('java-docker'){
+                //   sh 'ls -la'
+                //   sh 'pwd'
+                    
+                // }
+                sh 'ls -la'
+                sh 'pwd'
+            }
+        }
+        stage('Build docker image') {
+            steps {
+                
+                
+                sh 'docker build -t devopsenginire/jenkins:1.0 . '
+               
+            }
+        }
+        stage('Login') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+        stage('Push Docker hub') {
+            steps {
+                 
+                 sh 'docker push devopsenginire/jenkins:1.0 '
+                   
+             
+            }
+        }
+    }
+}
